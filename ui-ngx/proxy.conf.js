@@ -43,6 +43,11 @@ const PROXY_CONFIG = {
     "ws": true,
     "secure": false
   },
+  "/custom-api": { // 新增的代理配置
+    "target": forwardUrl,
+    "secure": false,
+    "changeOrigin": true
+  }
 };
 
 module.exports = PROXY_CONFIG;
