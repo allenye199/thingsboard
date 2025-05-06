@@ -57,7 +57,7 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
   disabled: boolean;
 
   @Input()
-  defaultCountry = 'US';
+  defaultCountry = 'CN';
 
   @Input()
   enableFlagsSelect = true;

@@ -1,0 +1,15 @@
+选择增加一个MCP server
+选择STDIO
+输入命令
+npx -y @upstash/context7-mcp@latest
+
+重新启动VSCODE
+代理模式下 后加入 use context7即可应用
+
+
+
+
+
+
+
+

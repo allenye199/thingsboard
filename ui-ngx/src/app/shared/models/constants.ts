@@ -182,7 +182,7 @@ export const HelpLinks = {
     widgetsConfigAlarm: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/ui/widget-library#alarm-widget`,
     widgetsConfigStatic: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/ui/widget-library#static`,
     queue: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/queue`,
-    repositorySettings: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/version-control/#git-settings-configuration`,
+    repositorySettings: '', // 链接已移除
     autoCommitSettings: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/version-control/#auto-commit`,
     twoFactorAuthentication: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/two-factor-authentication`,
     sentNotification: `${helpBaseUrl}/docs${docPlatformPrefix}/user-guide/notifications/#send-notification`,
