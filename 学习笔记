@@ -1,1 +1,9 @@
+sysadmin      
+    管理tenant
 
+tenant 
+    管理customer
+        管理customer-users
+
+customer
+    不同的user登录看到不同的页面

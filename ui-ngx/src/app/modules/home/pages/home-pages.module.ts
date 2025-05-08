@@ -46,8 +46,15 @@ import { AccountModule } from '@home/pages/account/account.module';
 import { ScadaSymbolModule } from '@home/pages/scada-symbol/scada-symbol.module';
 import { GatewaysModule } from '@home/pages/gateways/gateways.module';
 import { MobileModule } from '@home/pages/mobile/mobile.module';
+import { HomePagesRoutingModule } from './home-pages-routing.module';
+import { PigFarmConfigComponent } from './pig-farm-config/pig-farm-config.component';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
+  declarations: [
+    PigFarmConfigComponent
+  ],
   exports: [
     AdminModule,
     HomeLinksModule,
@@ -79,6 +86,11 @@ import { MobileModule } from '@home/pages/mobile/mobile.module';
     VcModule,
     AccountModule,
     ScadaSymbolModule
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    HomePagesRoutingModule
   ]
 })
 export class HomePagesModule { }

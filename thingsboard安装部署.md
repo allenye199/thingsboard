@@ -150,6 +150,9 @@ cd ui-ngx
 ```bash
 npm install
 ```
+#### **6.2 编译**
+
+npm run build
 
 #### **6.3 启动前端开发服务器**
 ```bash
@@ -205,20 +208,3 @@ tail -f logs/thingsboard.log
 完成以上步骤后，您应该可以成功部署 ThingsBoard 并开始前端开发。如果有任何问题，请随时提问！
 
 ====================================================================================
-工作区（Working Directory）：
-
-您正在编辑的实际文件所在的位置。
-这是您在本地文件系统中看到的文件。
-
-
-暂存区（Staging Area 或 Index）：
-用于暂时存储您准备提交的更改。
-您可以通过 git add 将文件从工作区添加到暂存区。
-
-本地仓库（Local Repository）：
-存储在您本地计算机上的 Git 仓库。
-当您执行 git commit 时，暂存区的更改会被保存到本地仓库。
-
-远程仓库（Remote Repository）：
-存储在远程服务器上的 Git 仓库（如 GitHub、GitLab 等）。
-您可以通过 git push 将本地仓库的更改推送到远程仓库。

@@ -1,4 +1,5 @@
 {
+    "menu.pig-farm-config": "猪场配置",
     "access": {
         "unauthorized": "未授权",
         "unauthorized-access": "未授权访问",

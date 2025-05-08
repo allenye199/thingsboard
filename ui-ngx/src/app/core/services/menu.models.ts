@@ -104,7 +104,8 @@ export enum MenuId {
   features = 'features',
   otaUpdates = 'otaUpdates',
   version_control = 'version_control',
-  api_usage = 'api_usage'
+  api_usage = 'api_usage',
+  pig_farm_config = 'pig_farm_config'
 }
 
 declare type MenuFilter = (authState: AuthState) => boolean;
@@ -624,17 +625,6 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
     }
   ],
   [
-    MenuId.edge_instances,
-    {
-      id: MenuId.edge_instances,
-      name: 'edge.edge-instances',
-      fullName: 'edge.edge-instances',
-      type: 'link',
-      path: '/edgeManagement/instances',
-      icon: 'router'
-    }
-  ],
-  [
     MenuId.rulechain_templates,
     {
       id: MenuId.rulechain_templates,
@@ -683,6 +673,16 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       type: 'link',
       path: '/usage',
       icon: 'insert_chart'
+    }
+  ],
+  [
+    MenuId.pig_farm_config,
+    {
+      id: MenuId.pig_farm_config,
+      name: 'menu.pig-farm-config',
+      type: 'link',
+      path: '/pigFarmConfig',
+      icon: 'mdi:pig'
     }
   ]
 ]);
@@ -874,13 +874,13 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
           {id: MenuId.entity_views}
         ]
       },
-      {id: MenuId.edge_instances},
       {
         id: MenuId.notifications_center,
         pages: [
           {id: MenuId.notification_inbox}
         ]
-      }
+      },
+      {id: MenuId.pig_farm_config}
     ]
   ]
 ]);
@@ -964,10 +964,6 @@ const defaultHomeSectionMap = new Map<Authority, HomeSectionReference[]>([
       {
         name: 'entity-view.management',
         places: [MenuId.entity_views]
-      },
-      {
-        name: 'edge.management',
-        places: [MenuId.edge_instances]
       },
       {
         name: 'dashboard.view-dashboards',
