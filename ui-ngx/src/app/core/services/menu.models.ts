@@ -105,7 +105,9 @@ export enum MenuId {
   otaUpdates = 'otaUpdates',
   version_control = 'version_control',
   api_usage = 'api_usage',
-  pig_farm_config = 'pig_farm_config'
+  pig_farm_config = 'pig_farm_config',
+  pig_pens = 'pig_pens',
+  farm_admins = 'farm_admins'
 }
 
 declare type MenuFilter = (authState: AuthState) => boolean;
@@ -125,7 +127,7 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
     MenuId.tenants,
     {
       id: MenuId.tenants,
-      name: 'tenant.tenants',
+      name: '集团设置',
       type: 'link',
       path: '/tenants',
       icon: 'supervisor_account'
@@ -477,9 +479,9 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
     MenuId.audit_log,
     {
       id: MenuId.audit_log,
-      name: 'audit-log.audit-logs',
+      name: '日志',
       type: 'link',
-      path: '/security-settings/auditLogs',
+      path: '/auditLogs',
       icon: 'track_changes'
     }
   ],
@@ -527,7 +529,7 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
     MenuId.assets,
     {
       id: MenuId.assets,
-      name: 'asset.assets',
+      name: '单元',
       type: 'link',
       path: '/entities/assets',
       icon: 'domain'
@@ -587,9 +589,9 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
     MenuId.customers,
     {
       id: MenuId.customers,
-      name: 'customer.customers',
+      name: '猪场',
       type: 'link',
-      path: '/customers',
+      path: '/dashboards/e4889a10-2be8-11f0-b318-f97eb29628d6',
       icon: 'supervisor_account'
     }
   ],
@@ -684,6 +686,26 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       path: '/pigFarmConfig',
       icon: 'mdi:pig'
     }
+  ],
+  [
+    MenuId.pig_pens,
+    {
+      id: MenuId.pig_pens,
+      name: '猪栏',
+      type: 'link',
+      path: '/pig-pens',
+      icon: 'mdi:gate'
+    }
+  ],
+  [
+    MenuId.farm_admins,
+    {
+      id: MenuId.farm_admins,
+      name: '猪场管理员',
+      type: 'link',
+      path: '/farm-admins',
+      icon: 'person_pin'
+    }
   ]
 ]);
 
@@ -705,23 +727,6 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
     [
       {id: MenuId.home},
       {id: MenuId.tenants},
-      {id: MenuId.tenant_profiles},
-      {
-        id: MenuId.resources,
-        pages: [
-          {
-            id: MenuId.widget_library,
-            pages: [
-              {id: MenuId.widget_types},
-              {id: MenuId.widgets_bundles}
-            ]
-          },
-          {id: MenuId.images},
-          {id: MenuId.scada_symbols},
-          {id: MenuId.javascript_library},
-          {id: MenuId.resources_library}
-        ]
-      },
       {
         id: MenuId.notifications_center,
         pages: [
@@ -730,37 +735,6 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
           {id: MenuId.notification_recipients},
           {id: MenuId.notification_templates},
           {id: MenuId.notification_rules}
-        ]
-      },
-      {
-        id: MenuId.mobile_center,
-        pages: [
-          {id: MenuId.mobile_bundles},
-          {id: MenuId.mobile_apps},
-          {id: MenuId.mobile_qr_code_widget}
-        ]
-      },
-      {
-        id: MenuId.settings,
-        pages: [
-          {id: MenuId.general},
-          {id: MenuId.mail_server},
-          {id: MenuId.notification_settings},
-          {id: MenuId.queues}
-        ]
-      },
-      {
-        id: MenuId.security_settings,
-        pages: [
-          {id: MenuId.security_settings_general},
-          {id: MenuId.two_fa},
-          {
-            id: MenuId.oauth2,
-            pages: [
-              {id: MenuId.domains},
-              {id: MenuId.clients}
-            ]
-          }
         ]
       }
     ]
@@ -769,56 +743,13 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
     Authority.TENANT_ADMIN,
     [
       {id: MenuId.home},
-      {id: MenuId.alarms},
-      {id: MenuId.dashboards},
-      {
-        id: MenuId.entities,
-        pages: [
-          {id: MenuId.devices},
-          {id: MenuId.assets},
-          {id: MenuId.entity_views},
-          {id: MenuId.gateways}
-        ]
-      },
-      {
-        id: MenuId.profiles,
-        pages: [
-          {id: MenuId.device_profiles},
-          {id: MenuId.asset_profiles}
-        ]
-      },
       {id: MenuId.customers},
-      {id: MenuId.rule_chains},
-      {
-        id: MenuId.edge_management,
-        pages: [
-          {id: MenuId.edges},
-          {id: MenuId.rulechain_templates}
-        ]
-      },
-      {
-        id: MenuId.features,
-        pages: [
-          {id: MenuId.otaUpdates},
-          {id: MenuId.version_control}
-        ]
-      },
-      {
-        id: MenuId.resources,
-        pages: [
-          {
-            id: MenuId.widget_library,
-            pages: [
-              {id: MenuId.widget_types},
-              {id: MenuId.widgets_bundles}
-            ]
-          },
-          {id: MenuId.images},
-          {id: MenuId.scada_symbols},
-          {id: MenuId.javascript_library},
-          {id: MenuId.resources_library}
-        ]
-      },
+      {id: MenuId.assets},
+      {id: MenuId.pig_pens},
+      {id: MenuId.devices},
+      {id: MenuId.farm_admins},
+      {id: MenuId.alarms},
+      {id: MenuId.audit_log},
       {
         id: MenuId.notifications_center,
         pages: [
@@ -827,35 +758,6 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
           {id: MenuId.notification_recipients},
           {id: MenuId.notification_templates},
           {id: MenuId.notification_rules}
-        ]
-      },
-      {
-        id: MenuId.mobile_center,
-        pages: [
-          {id: MenuId.mobile_bundles},
-          {id: MenuId.mobile_apps}
-        ]
-      },
-      {id: MenuId.api_usage},
-      {
-        id: MenuId.settings,
-        pages: [
-          {id: MenuId.home_settings},
-          {id: MenuId.notification_settings},
-          {id: MenuId.repository_settings},
-          {id: MenuId.auto_commit_settings}
-        ]
-      },
-      {
-        id: MenuId.security_settings,
-        pages: [
-          {id: MenuId.audit_log},
-          {
-            id: MenuId.oauth2,
-            pages: [
-              {id: MenuId.clients}
-            ]
-          }
         ]
       }
     ]
@@ -891,17 +793,7 @@ const defaultHomeSectionMap = new Map<Authority, HomeSectionReference[]>([
     [
       {
         name: 'tenant.management',
-        places: [MenuId.tenants, MenuId.tenant_profiles]
-      },
-      {
-        name: 'widget.management',
-        places: [MenuId.widget_library]
-      },
-      {
-        name: 'admin.system-settings',
-        places: [MenuId.general, MenuId.mail_server,
-          MenuId.notification_settings, MenuId.security_settings, MenuId.oauth2, MenuId.domains,
-          MenuId.clients, MenuId.two_fa, MenuId.resources_library, MenuId.queues]
+        places: [MenuId.tenants]
       }
     ]
   ],
@@ -909,44 +801,32 @@ const defaultHomeSectionMap = new Map<Authority, HomeSectionReference[]>([
     Authority.TENANT_ADMIN,
     [
       {
-        name: 'rulechain.management',
-        places: [MenuId.rule_chains]
-      },
-      {
         name: 'customer.management',
         places: [MenuId.customers]
       },
       {
         name: 'asset.management',
-        places: [MenuId.assets, MenuId.asset_profiles]
+        places: [MenuId.assets]
+      },
+      {
+        name: 'pig-pen.management',
+        places: [MenuId.pig_pens]
       },
       {
         name: 'device.management',
-        places: [MenuId.devices, MenuId.device_profiles, MenuId.otaUpdates]
+        places: [MenuId.devices]
       },
       {
-        name: 'entity-view.management',
-        places: [MenuId.entity_views]
+        name: 'farm-admin.management',
+        places: [MenuId.farm_admins]
       },
       {
-        name: 'edge.management',
-        places: [MenuId.edges, MenuId.rulechain_templates]
-      },
-      {
-        name: 'dashboard.management',
-        places: [MenuId.widget_library, MenuId.dashboards]
-      },
-      {
-        name: 'version-control.management',
-        places: [MenuId.version_control]
+        name: 'alarm.management',
+        places: [MenuId.alarms]
       },
       {
         name: 'audit-log.audit',
-        places: [MenuId.audit_log, MenuId.api_usage]
-      },
-      {
-        name: 'admin.system-settings',
-        places: [MenuId.home_settings, MenuId.resources_library, MenuId.repository_settings, MenuId.auto_commit_settings]
+        places: [MenuId.audit_log]
       }
     ]
   ],

@@ -36,10 +36,7 @@ export const auditLogsRoutes: Routes = [
 ];
 
 const routes: Routes = [
-  {
-    path: 'auditLogs',
-    redirectTo: '/security-settings/auditLogs'
-  }
+  ...auditLogsRoutes
 ];
 
 @NgModule({

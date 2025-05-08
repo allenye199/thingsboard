@@ -392,7 +392,7 @@ const routes: Routes = [
           auth: [Authority.SYS_ADMIN, Authority.TENANT_ADMIN],
           redirectTo: {
             SYS_ADMIN: '/security-settings/general',
-            TENANT_ADMIN: '/security-settings/auditLogs'
+            TENANT_ADMIN: '/auditLogs'
           }
         }
       },
