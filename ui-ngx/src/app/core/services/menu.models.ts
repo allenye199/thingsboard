@@ -107,7 +107,14 @@ export enum MenuId {
   api_usage = 'api_usage',
   pig_farm_config = 'pig_farm_config',
   pig_pens = 'pig_pens',
-  farm_admins = 'farm_admins'
+  farm_admins = 'farm_admins',
+  pigfarm = 'pigfarm',
+  pigsty = 'pigsty',
+  feed_curve = 'feed_curve',
+  feed_plan = 'feed_plan',
+  pipeline = 'pipeline',
+  recipe = 'recipe',
+  log = 'log'
 }
 
 declare type MenuFilter = (authState: AuthState) => boolean;
@@ -706,6 +713,83 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       path: '/farm-admins',
       icon: 'person_pin'
     }
+  ],
+  [
+    MenuId.pigfarm,
+    {
+      id: MenuId.pigfarm,
+      name: '猪场',
+      type: 'link',
+      path: '/dashboards/c407b430-2e61-11f0-98e5-9b82fd9cf0ad',
+      icon: 'home',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.pigsty,
+    {
+      id: MenuId.pigsty,
+      name: '单元',
+      type: 'link',
+      path: '/dashboards/51393c20-2e67-11f0-98e5-9b82fd9cf0ad',
+      icon: 'grid_view',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.feed_curve,
+    {
+      id: MenuId.feed_curve,
+      name: '饲喂曲线',
+      type: 'link',
+      path: '/dashboards/5ed5f360-2e70-11f0-98e5-9b82fd9cf0ad',
+      icon: 'timeline',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.feed_plan,
+    {
+      id: MenuId.feed_plan,
+      name: '饲喂计划',
+      type: 'link',
+      path: '/dashboards/74af3660-2e70-11f0-98e5-9b82fd9cf0ad',
+      icon: 'event_note',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.pipeline,
+    {
+      id: MenuId.pipeline,
+      name: '管道',
+      type: 'link',
+      path: '/dashboards/c722ce80-2e6f-11f0-98e5-9b82fd9cf0ad',
+      icon: 'settings_ethernet',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.recipe,
+    {
+      id: MenuId.recipe,
+      name: '饲喂配方',
+      type: 'link',
+      path: '/dashboards/7f027e10-2e70-11f0-98e5-9b82fd9cf0ad',
+      icon: 'receipt',
+      rootOnly: true
+    }
+  ],
+  [
+    MenuId.log,
+    {
+      id: MenuId.log,
+      name: '组态监控',
+      type: 'link',
+      path: '/dashboards/05fe6ed0-2e74-11f0-98e5-9b82fd9cf0ad',
+      icon: 'assignment',
+      rootOnly: true
+    }
   ]
 ]);
 
@@ -744,10 +828,6 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
     [
       {id: MenuId.home},
       {id: MenuId.customers},
-      {id: MenuId.assets},
-      {id: MenuId.pig_pens},
-      {id: MenuId.devices},
-      {id: MenuId.farm_admins},
       {id: MenuId.alarms},
       {id: MenuId.audit_log},
       {
@@ -766,15 +846,21 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
     Authority.CUSTOMER_USER,
     [
       {id: MenuId.home},
+      {id: MenuId.log},
+      {id: MenuId.pigfarm},
+      {id: MenuId.pigsty},
+      {id: MenuId.devices},
+      {id: MenuId.pipeline},
+      {id: MenuId.feed_curve},
+      {id: MenuId.feed_plan},
+      {id: MenuId.recipe},
       {id: MenuId.alarms},
-      {id: MenuId.dashboards},
       {
         id: MenuId.notifications_center,
         pages: [
           {id: MenuId.notification_inbox}
         ]
-      },
-      {id: MenuId.pig_farm_config}
+      }
     ]
   ]
 ]);
@@ -826,8 +912,44 @@ const defaultHomeSectionMap = new Map<Authority, HomeSectionReference[]>([
     Authority.CUSTOMER_USER,
     [
       {
-        name: 'dashboard.view-dashboards',
-        places: [MenuId.dashboards]
+        name: '猪场',
+        places: [MenuId.pigfarm]
+      },
+      {
+        name: '组态监控',
+        places: [MenuId.log]
+      },
+      {
+        name: '单元',
+        places: [MenuId.pigsty]
+      },
+      {
+        name: '设备',
+        places: [MenuId.devices]
+      },
+      {
+        name: '管道',
+        places: [MenuId.pipeline]
+      },
+      {
+        name: '饲喂曲线',
+        places: [MenuId.feed_curve]
+      },
+      {
+        name: '饲喂计划',
+        places: [MenuId.feed_plan]
+      },
+      {
+        name: '饲喂配方',
+        places: [MenuId.recipe]
+      },
+      {
+        name: '告警',
+        places: [MenuId.alarms]
+      },
+      {
+        name: '通知中心',
+        places: [MenuId.notifications_center]
       }
     ]
   ]

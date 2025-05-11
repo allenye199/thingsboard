@@ -13,8 +13,8 @@
 
   首页 - 链接tenant_dashboard,集团首页kpi dashboard。（已实现）
   猪场 - 链接farm_dashboard，实现猪场的增删改。（原"customer" dashboard页面），可以管理多个猪场管理员。（已实现）
-    设备 - 链接device_dashboard页面，管理通讯参数，校时参数。只有一个设备。通过widget单元按钮链接跳转。
-    人员 - 链接user_dashboard页面，可以管理多个猪场管理员。通过widget单元按钮链接跳转。
+    设备（子页面，不是菜单） - 链接device_dashboard页面，管理通讯参数，校时参数。只有一个设备。通过widget单元按钮链接跳转。
+    人员（子页面，不是菜单） - 链接user_dashboard页面，可以管理多个猪场管理员。通过widget单元按钮链接跳转。
   告警 - 告警管理dashboard。（已实现）
   日志 - 日志dashboard，原"审计日志"菜单。（已实现）
   通知中心 - 通知dashboard，包含子菜单：（已实现）
@@ -29,7 +29,7 @@
   首页 - 链接pigfarm_total_dashboard,集团首页kpi dashboard。（已实现）
   猪场 - 链接pigfarm_dashboard，编辑当前猪场详情。
   单元 - 链接pigsty_dashboard，编辑当前猪场单元详情。
-    猪栏 - 链接unit_dashboard，通过猪场单元dashboard上的widget单元按钮跳转。
+    猪栏（子页面，不是菜单） - 链接unit_dashboard，通过猪场单元dashboard上的widget单元按钮跳转。
   设备 - 链接device_dashboard，配置设备参数。
   饲喂曲线 - 链接feed_curve_dashboard，配置饲喂曲线参数。
   饲喂计划 - 链接feed_plan_dashboard，配置饲喂计划参数。

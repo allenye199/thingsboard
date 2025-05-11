@@ -18,3 +18,58 @@
 远程仓库（Remote Repository）：
 存储在远程服务器上的 Git 仓库（如 GitHub、GitLab 等）。
 您可以通过 git push 将本地仓库的更改推送到远程仓库。
+
+
+###=================================================================
+push
+将本地仓库的更改推送到远程仓库。
+
+
+###如果需要更新personal access token，您可以使用以下命令：
+
+## 获取GitHub Personal Access Token
+首先，您需要在GitHub上创建一个Personal Access Token：
+
+登录GitHub账户
+点击右上角头像 -> Settings -> Developer settings -> Personal access tokens -> Tokens (classic)
+点击"Generate new token" -> "Generate new token (classic)"
+给令牌一个描述性名称，例如"VSCode ThingsBoard开发"
+选择需要的权限范围（至少需要repo权限）
+点击"Generate token"按钮
+复制生成的token（这是您唯一能看到token的机会）
+
+## 2. 重新配置Git远程仓库URL
+
+使用以下命令将Personal Access Token直接嵌入到URL中：
+
+```bash
+# 更新远程仓库URL，将TOKEN替换为您新生成的Personal Access Token
+git remote set-url origin https://allenye199:your_token@github.com/allenye199/thingsboard.git
+
+```
+
+请将`YOUR_USERNAME`替换为您的GitHub用户名，将`YOUR_PAT`替换为您新生成的Personal Access Token。
+
+## 3. 验证远程仓库配置
+
+```bash
+# 查看远程仓库配置(不会显示token)
+git remote -v
+```
+
+## 4. 尝试推送
+
+```bash
+git push -u origin release-4.0-allen
+```
+或者在vscode中使用Git扩展进行推送。
+
+如果这样还不行，我们可以尝试更直接的方式，通过命令行执行git推送时明确指定凭证：
+
+```bash
+# 通过环境变量设置凭证
+export GIT_USERNAME="YOUR_USERNAME"
+export GIT_PASSWORD="YOUR_PAT"
+git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/allenye199/thingsboard.git release-4.0-allen
+```
+
