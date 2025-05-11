@@ -1,0 +1,46 @@
+###sysadmin 界面------超级用户（sysadmin），用来管理集团（原tenant）
+
+  首页----链接sytemadmin_dashboard.整个系统的KPI dashboard.（已实现）
+  集团设置---链接集团管理dashboard。实现对tenantadmin的增删改（原tenant dashbord）（已实现）
+  通知中心 - 链接通知dashboard，包含子菜单：（已实现）
+      收件箱
+      已发送
+      收件人
+      模板
+      规则
+
+###tenantadmin界面------用来管理当前tenant内的猪场(tenant下的customers)
+
+  首页 - 链接tenant_dashboard,集团首页kpi dashboard。（已实现）
+  猪场 - 链接farm_dashboard，实现猪场的增删改。（原"customer" dashboard页面），可以管理多个猪场管理员。（已实现）
+    设备 - 链接device_dashboard页面，管理通讯参数，校时参数。只有一个设备。通过widget单元按钮链接跳转。
+    人员 - 链接user_dashboard页面，可以管理多个猪场管理员。通过widget单元按钮链接跳转。
+  告警 - 告警管理dashboard。（已实现）
+  日志 - 日志dashboard，原"审计日志"菜单。（已实现）
+  通知中心 - 通知dashboard，包含子菜单：（已实现）
+      收件箱
+      已发送
+      收件人
+      模板
+      规则
+
+
+###customer界面------用来管理猪场下的单元，猪栏、及日常饲喂配置，由猪场管理员操作。不同的猪场管理员登录看到不同的页面。
+  首页 - 链接pigfarm_total_dashboard,集团首页kpi dashboard。（已实现）
+  猪场 - 链接pigfarm_dashboard，编辑当前猪场详情。
+  单元 - 链接pigsty_dashboard，编辑当前猪场单元详情。
+    猪栏 - 链接unit_dashboard，通过猪场单元dashboard上的widget单元按钮跳转。
+  设备 - 链接device_dashboard，配置设备参数。
+  饲喂曲线 - 链接feed_curve_dashboard，配置饲喂曲线参数。
+  饲喂计划 - 链接feed_plan_dashboard，配置饲喂计划参数。
+  管道配置 - 链接pipeline_dashboard，配置管道参数。
+  饲喂配方 - 链接recipe_dashboard，配置饲喂配方参数。
+  告警 - 链接alarm_dashboard（已实现）
+  日志 - 链接log_dashboard，记录系统操作日志。（已实现）
+  通知中心 - 链接note_dashboard，包含子菜单：（已实现）
+      收件箱
+      已发送
+      收件人
+      模板
+      规则
+

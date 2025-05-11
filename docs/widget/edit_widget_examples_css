@@ -1,0 +1,157 @@
+/*=======================================================================*/
+/*==========  There are two examples: for edit and add entity  ==========*/
+/*=======================================================================*/
+/*========================  Edit entity example  ========================*/
+/*=======================================================================*/
+/*
+.edit-entity-form .boolean-value-input {
+    padding-left: 5px;
+}
+
+.edit-entity-form .boolean-value-input .checkbox-label {
+    color: rgba(0,0,0,0.54);
+    font-size: 12px;
+}
+
+.relations-list .header {
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.relations-list .header .cell {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, .54);
+    white-space: nowrap;
+}
+
+.relations-list .mat-form-field-infix {
+    width: auto !important;
+}
+
+.relations-list .body {
+    padding-right: 5px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+}
+
+.relations-list .body .row {
+    padding-top: 5px;
+}
+
+.relations-list .body .cell {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.relations-list .body .md-button {
+    margin: 0;
+}
+*/
+/*========================================================================*/
+/*=========================  Add entity example  =========================*/
+/*========================================================================*/
+/*
+.add-entity-form .boolean-value-input {
+    padding-left: 5px;
+}
+
+.add-entity-form .boolean-value-input .checkbox-label {
+    color: rgba(0,0,0,0.54);
+    font-size: 12px;
+}
+
+.relations-list .header {
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.relations-list .header .cell {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, .54);
+    white-space: nowrap;
+}
+
+.relations-list .mat-form-field-infix {
+    width: auto !important;
+}
+
+.relations-list .body {
+    padding-right: 5px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+}
+
+.relations-list .body .row {
+    padding-top: 5px;
+}
+
+.relations-list .body .cell {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.relations-list .body .md-button {
+    margin: 0;
+}
+*/
+
+
+.edit-entity-form {
+  min-width: 600px;
+  max-width: 800px;
+  height: 100%;
+  overflow: hidden;
+}
+  
+.edit-entity-form .boolean-value-input {
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.edit-entity-form .enabled-label {
+  margin-right: 8px;
+  color: rgba(0,0,0,0.6);
+}
+  
+.edit-entity-form .mat-form-field {
+  margin-bottom: 4px;
+}
+  
+.edit-entity-form .flex-2 {
+  flex: 2;
+}
+  
+.edit-entity-form .mat-mdc-form-field-infix {
+  width: auto !important;
+}
+  
+.edit-entity-form .mat-toolbar {
+  background-color: #305680;
+  color: white;
+}
+  
+.edit-entity-form .mat-dialog-content {
+  padding: 16px;
+  max-height: 350px;
+  overflow-y: hidden;
+}
+  
+.edit-entity-form .mat-dialog-actions {
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  margin-bottom: 0;
+}
+
+.edit-entity-form textarea {
+  resize: none;
+}

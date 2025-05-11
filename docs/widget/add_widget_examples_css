@@ -1,0 +1,55 @@
+/*=======================================================================*/
+/*==========  猪场添加样式  ==========*/
+/*=======================================================================*/
+
+.add-entity-form {
+  min-width: 600px;
+  max-width: 800px;
+  height: 100%;
+  overflow: hidden;
+}
+  
+.add-entity-form .boolean-value-input {
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.add-entity-form .enabled-label {
+  margin-right: 8px;
+  color: rgba(0,0,0,0.6);
+}
+  
+.add-entity-form .mat-form-field {
+  margin-bottom: 4px;
+}
+  
+.add-entity-form .flex-2 {
+  flex: 2;
+}
+  
+.add-entity-form .mat-mdc-form-field-infix {
+  width: auto !important;
+}
+  
+.add-entity-form .mat-toolbar {
+  background-color: #305680;
+  color: white;
+}
+  
+.add-entity-form .mat-dialog-content {
+  padding: 16px;
+  max-height: 350px;
+  overflow-y: hidden;
+}
+  
+.add-entity-form .mat-dialog-actions {
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  margin-bottom: 0;
+}
+
+.add-entity-form textarea {
+  resize: none;
+}

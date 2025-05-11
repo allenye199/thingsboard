@@ -769,14 +769,6 @@ const defaultUserMenuMap = new Map<Authority, MenuReference[]>([
       {id: MenuId.alarms},
       {id: MenuId.dashboards},
       {
-        id: MenuId.entities,
-        pages: [
-          {id: MenuId.devices},
-          {id: MenuId.assets},
-          {id: MenuId.entity_views}
-        ]
-      },
-      {
         id: MenuId.notifications_center,
         pages: [
           {id: MenuId.notification_inbox}
@@ -833,18 +825,6 @@ const defaultHomeSectionMap = new Map<Authority, HomeSectionReference[]>([
   [
     Authority.CUSTOMER_USER,
     [
-      {
-        name: 'asset.view-assets',
-        places: [MenuId.assets]
-      },
-      {
-        name: 'device.view-devices',
-        places: [MenuId.devices]
-      },
-      {
-        name: 'entity-view.management',
-        places: [MenuId.entity_views]
-      },
       {
         name: 'dashboard.view-dashboards',
         places: [MenuId.dashboards]

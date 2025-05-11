@@ -136,6 +136,7 @@ spring:
 运行以下命令启动后端服务：
 ```bash
 java -jar application/target/thingsboard-4.0.1-boot.jar
+
 ```
 
 ---

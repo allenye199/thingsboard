@@ -1,0 +1,129 @@
+/*=======================================================================*/
+/*=====  猪场添加功能  =====*/
+/*=======================================================================*/
+
+let $injector = widgetContext.$scope.$injector;
+let customDialog = $injector.get(widgetContext.servicesMap.get('customDialog'));
+let customerService = $injector.get(widgetContext.servicesMap.get('customerService'));
+let attributeService = $injector.get(widgetContext.servicesMap.get('attributeService'));
+
+openAddEntityDialog();
+
+function openAddEntityDialog() {
+    customDialog.customDialog(htmlTemplate, AddEntityDialogController).subscribe();
+}
+
+function AddEntityDialogController(instance) {
+    let vm = instance;
+    
+    vm.isLoading$ = new widgetContext.rxjs.BehaviorSubject(false);
+    
+    // 国家代码列表
+    vm.countryCodes = [
+        {value: '+86', label: '中国 (+86)'},
+        {value: '+1', label: '美国/加拿大 (+1)'},
+        {value: '+44', label: '英国 (+44)'},
+        {value: '+81', label: '日本 (+81)'},
+        {value: '+82', label: '韩国 (+82)'},
+        {value: '+61', label: '澳大利亚 (+61)'},
+        {value: '+65', label: '新加坡 (+65)'},
+        {value: '+60', label: '马来西亚 (+60)'},
+        {value: '+66', label: '泰国 (+66)'},
+        {value: '+84', label: '越南 (+84)'}
+    ];
+    
+    // 创建添加表单 - 添加电子邮件验证
+    vm.addEntityFormGroup = vm.fb.group({
+        title: ['', [vm.validators.required]], // 猪场名称
+        leader: [''], // 负责人
+        farm_enable: [true], // 启用
+        country: ['中国'], // 国家
+        state: [''], // 省份
+        city: [''], // 城市
+        zip: [''], // 邮编
+        address: [''], // 地址
+        email: ['', [vm.validators.email]], // 添加电子邮件验证
+        phone: [''], // 电话号码
+        additionalInfo: vm.fb.group({
+            description: [''], // 描述
+            countrycode: ['+86'] // 国家代码
+        })
+    });
+    
+    // 取消按钮处理函数
+    vm.cancel = function() {
+        vm.dialogRef.close(null);
+    };
+    
+    // 保存按钮处理函数 - 增加表单验证处理
+    vm.save = function() {
+        // 检查表单是否有效
+        if (vm.addEntityFormGroup.invalid) {
+            // 标记所有字段为已触碰，显示验证消息
+            vm.addEntityFormGroup.markAllAsTouched();
+            return;
+        }
+        
+        vm.isLoading$.next(true);
+        
+        const formValues = vm.addEntityFormGroup.value;
+        
+        // 创建新客户对象
+        let newCustomer = {
+            title: formValues.title,
+            name: formValues.title,
+            country: formValues.country,
+            state: formValues.state,
+            city: formValues.city,
+            address: formValues.address,
+            zip: formValues.zip,
+            email: formValues.email,
+            phone: formValues.phone,
+            additionalInfo: {
+                description: formValues.additionalInfo.description,
+                countrycode: formValues.additionalInfo.countrycode
+            }
+        };
+        
+        // 保存新客户
+        customerService.saveCustomer(newCustomer).subscribe(
+            function success(entity) {
+                // 保存成功后，添加服务器属性
+                const serverAttributes = [
+                    { key: "farm_enable", value: formValues.farm_enable },
+                    { key: "leader", value: formValues.leader || "" }
+                ];
+                
+                attributeService.saveEntityAttributes(
+                    { entityType: 'CUSTOMER', id: entity.id.id },
+                    'SERVER_SCOPE',
+                    serverAttributes
+                ).subscribe(
+                    function() {
+                        widgetContext.updateAliases();
+                        widgetContext.showSuccessToast('猪场已成功创建!');
+                        vm.isLoading$.next(false);
+                        vm.dialogRef.close(entity);
+                    },
+                    function(attrError) {
+                        // 即使服务器属性保存失败，实体创建已成功
+                        console.warn('服务器属性保存失败:', attrError);
+                        widgetContext.updateAliases();
+                        widgetContext.showSuccessToast('猪场已创建，但部分属性保存失败');
+                        vm.isLoading$.next(false);
+                        vm.dialogRef.close(entity);
+                    }
+                );
+            },
+            function fail(error) {
+                console.error('创建猪场失败:', error);
+                vm.isLoading$.next(false);
+                
+                // 只有在不是表单验证错误的情况下才显示错误提示
+                if (error && error.status !== 400) {
+                    widgetContext.showErrorToast('创建猪场失败: ' + (error.data && error.data.message ? error.data.message : '未知错误'));
+                }
+            }
+        );
+    };
+}

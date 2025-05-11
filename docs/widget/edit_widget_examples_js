@@ -1,0 +1,404 @@
+/*=======================================================================*/
+/*=====  There are three examples: for delete, edit and add entity  =====*/
+/*=======================================================================*/
+/*=======================  Delete entity example  =======================*/
+/*=======================================================================*/
+//
+//let $injector = widgetContext.$scope.$injector;
+//let dialogs = $injector.get(widgetContext.servicesMap.get('dialogs'));
+//let assetService = $injector.get(widgetContext.servicesMap.get('assetService'));
+//let deviceService = $injector.get(widgetContext.servicesMap.get('deviceService'));
+//
+//openDeleteEntityDialog();
+//
+//function openDeleteEntityDialog() {
+//    let title = 'Delete ' + entityId.entityType.toLowerCase() + ' ' +
+//                 entityName;
+//    let content = 'Are you sure you want to delete the ' +
+//                  entityId.entityType.toLowerCase() + ' ' + entityName + '?';
+//    dialogs.confirm(title, content, 'Cancel', 'Delete').subscribe(
+//        function(result) {
+//            if (result) {
+//                deleteEntity();
+//            }
+//        }
+//    );
+//}
+//
+//function deleteEntity() {
+//    deleteEntityObservable(entityId).subscribe(
+//        function success() {
+//            widgetContext.updateAliases();
+//        },
+//        function fail() {
+//            showErrorDialog();
+//        }
+//    );
+//}
+//
+//function deleteEntityObservable(entityId) {
+//    if (entityId.entityType == "ASSET") {
+//        return assetService.deleteAsset(entityId.id);
+//    } else if (entityId.entityType == "DEVICE") {
+//        return deviceService.deleteDevice(entityId.id);
+//    }
+//}
+//
+//function showErrorDialog() {
+//    let title = 'Error';
+//    let content = 'An error occurred while deleting the entity. Please try again.';
+//    dialogs.alert(title, content, 'CLOSE').subscribe(
+//        function(result) {}
+//    );
+//}
+//
+/*=======================================================================*/
+/*========================  Edit entity example  ========================*/
+/*=======================================================================*/
+
+let $injector = widgetContext.$scope.$injector;
+let customDialog = $injector.get(widgetContext.servicesMap.get('customDialog'));
+let customerService = $injector.get(widgetContext.servicesMap.get('customerService'));
+let attributeService = $injector.get(widgetContext.servicesMap.get('attributeService'));
+let entityRelationService = $injector.get(widgetContext.servicesMap.get('entityRelationService'));
+
+openEditEntityDialog();
+
+function openEditEntityDialog() {
+    customDialog.customDialog(htmlTemplate, EditEntityDialogController).subscribe();
+}
+
+function EditEntityDialogController(instance) {
+    let vm = instance;
+    
+    vm.entityName = entityName;
+    vm.entityId = entityId;
+    vm.isLoading$ = new widgetContext.rxjs.BehaviorSubject(true);
+    vm.entity = {};
+    
+    // 国家代码列表
+    vm.countryCodes = [
+        {value: '+86', label: '中国 (+86)'},
+        {value: '+1', label: '美国/加拿大 (+1)'},
+        {value: '+44', label: '英国 (+44)'},
+        {value: '+81', label: '日本 (+81)'},
+        {value: '+82', label: '韩国 (+82)'},
+        {value: '+61', label: '澳大利亚 (+61)'},
+        {value: '+65', label: '新加坡 (+65)'},
+        {value: '+60', label: '马来西亚 (+60)'},
+        {value: '+66', label: '泰国 (+66)'},
+        {value: '+84', label: '越南 (+84)'}
+    ];
+    
+    // 创建编辑表单 - 添加电子邮件验证
+    vm.editEntityFormGroup = vm.fb.group({
+        title: ['', [vm.validators.required]], // 猪场名称
+        leader: [''],
+        farm_enable: [true],
+        country: [''],
+        state: [''],
+        city: [''],
+        zip: [''],
+        address: [''],
+        email: ['', [vm.validators.email]], // 添加电子邮件验证
+        phone: [''],
+        additionalInfo: vm.fb.group({
+            description: [''],
+            countrycode: ['+86']
+        })
+    });
+    
+    // 获取实体信息 - 扩展以加载更多字段
+    getEntityInfo();
+    
+    // 取消按钮处理函数
+    vm.cancel = function() {
+        vm.dialogRef.close(null);
+    };
+    
+    // 保存按钮处理函数 - 增加表单验证处理
+    vm.save = function() {
+        // 检查表单是否有效
+        if (vm.editEntityFormGroup.invalid) {
+            // 标记所有字段为已触碰，显示验证消息
+            vm.editEntityFormGroup.markAllAsTouched();
+            return;
+        }
+        
+        vm.isLoading$.next(true);
+        
+        const formValues = vm.editEntityFormGroup.value;
+        
+        // 创建更新对象，逐步添加更多字段
+        let updatedCustomer = {
+            id: vm.entity.id,
+            title: formValues.title,
+            name: formValues.title,
+            tenantId: vm.entity.tenantId,
+            country: formValues.country,
+            state: formValues.state,
+            city: formValues.city,
+            address: formValues.address,
+            zip: formValues.zip,
+            email: formValues.email,
+            phone: formValues.phone,
+            additionalInfo: {
+                description: formValues.additionalInfo.description,
+                countrycode: formValues.additionalInfo.countrycode
+            }
+        };
+        
+        // 保留原有的additionalInfo字段
+        if (vm.entity.additionalInfo) {
+            // 合并而不是替换
+            updatedCustomer.additionalInfo = {
+                ...vm.entity.additionalInfo,
+                ...updatedCustomer.additionalInfo
+            };
+        }
+        
+        // 使用ThingsBoard内置的服务
+        customerService.saveCustomer(updatedCustomer).subscribe(
+            function success(entity) {
+                // 保存成功后，保存服务器属性
+                const serverAttributes = [
+                    { key: "farm_enable", value: formValues.farm_enable },
+                    { key: "leader", value: formValues.leader || "" }
+                ];
+                
+                attributeService.saveEntityAttributes(
+                    { entityType: 'CUSTOMER', id: entity.id.id },
+                    'SERVER_SCOPE',
+                    serverAttributes
+                ).subscribe(
+                    function() {
+                        widgetContext.updateAliases();
+                        widgetContext.showSuccessToast('猪场已成功更新!');
+                        vm.isLoading$.next(false);
+                        vm.dialogRef.close(entity);
+                    },
+                    function(attrError) {
+                        // 即使服务器属性保存失败，实体保存已成功
+                        console.warn('服务器属性保存失败:', attrError);
+                        widgetContext.updateAliases();
+                        widgetContext.showSuccessToast('猪场已更新，但部分属性保存失败');
+                        vm.isLoading$.next(false);
+                        vm.dialogRef.close(entity);
+                    }
+                );
+            },
+            function fail(error) {
+                console.error('保存猪场失败:', error);
+                vm.isLoading$.next(false);
+                widgetContext.showErrorToast('保存猪场失败: ' + (error.data && error.data.message ? error.data.message : '未知错误'));
+            }
+        );
+    };
+    
+    // 获取实体信息 - 扩展以加载更多字段
+    function getEntityInfo() {
+        vm.isLoading$.next(true);
+        
+        customerService.getCustomer(entityId.id).subscribe(
+            function success(customer) {
+                vm.entity = customer;
+                
+                // 获取服务器属性
+                attributeService.getEntityAttributes(
+                    { entityType: 'CUSTOMER', id: entityId.id },
+                    'SERVER_SCOPE'
+                ).subscribe(
+                    function(attributes) {
+                        // 处理服务器属性
+                        let attributesMap = {};
+                        if (attributes && attributes.length) {
+                            attributes.forEach(function(attribute) {
+                                attributesMap[attribute.key] = attribute.value;
+                            });
+                        }
+                        
+                        // 设置表单值，加载所有字段
+                        vm.editEntityFormGroup.patchValue({
+                            title: customer.title || customer.name,
+                            country: customer.country || '',
+                            state: customer.state || '',
+                            city: customer.city || '',
+                            address: customer.address || '',
+                            zip: customer.zip || '',
+                            email: customer.email || '',
+                            phone: customer.phone || '',
+                            // 服务器属性
+                            leader: attributesMap.leader || '',
+                            farm_enable: attributesMap.farm_enable !== undefined ? attributesMap.farm_enable : true,
+                            // additionalInfo字段
+                            additionalInfo: {
+                                description: customer.additionalInfo?.description || '',
+                                countrycode: customer.additionalInfo?.countrycode || '+86'
+                            }
+                        });
+                        
+                        vm.isLoading$.next(false);
+                    },
+                    function(attrError) {
+                        console.warn('获取服务器属性失败:', attrError);
+                        // 设置表单值，不含服务器属性
+                        vm.editEntityFormGroup.patchValue({
+                            title: customer.title || customer.name,
+                            country: customer.country || '',
+                            state: customer.state || '',
+                            city: customer.city || '',
+                            address: customer.address || '',
+                            zip: customer.zip || '',
+                            email: customer.email || '',
+                            phone: customer.phone || '',
+                            additionalInfo: {
+                                description: customer.additionalInfo?.description || '',
+                                countrycode: customer.additionalInfo?.countrycode || '+86'
+                            }
+                        });
+                        
+                        vm.isLoading$.next(false);
+                    }
+                );
+            },
+            function fail(error) {
+                console.error('Error loading customer:', error);
+                vm.isLoading$.next(false);
+                widgetContext.showErrorToast('获取猪场信息失败: ' + (error.data && error.data.message ? error.data.message : '未知错误'));
+                vm.dialogRef.close(null);
+            }
+        );
+    }
+}
+
+/*========================================================================*/
+/*=========================  Add entity example  =========================*/
+/*========================================================================*/
+//
+//let $injector = widgetContext.$scope.$injector;
+//let customDialog = $injector.get(widgetContext.servicesMap.get('customDialog'));
+//let assetService = $injector.get(widgetContext.servicesMap.get('assetService'));
+//let deviceService = $injector.get(widgetContext.servicesMap.get('deviceService'));
+//let attributeService = $injector.get(widgetContext.servicesMap.get('attributeService'));
+//let entityRelationService = $injector.get(widgetContext.servicesMap.get('entityRelationService'));
+//
+//openAddEntityDialog();
+//
+//function openAddEntityDialog() {
+//    customDialog.customDialog(htmlTemplate, AddEntityDialogController).subscribe();
+//}
+//
+//function AddEntityDialogController(instance) {
+//    let vm = instance;
+//
+//    vm.allowedEntityTypes = ['ASSET', 'DEVICE'];
+//    vm.entitySearchDirection = {
+//        from: "FROM",
+//        to: "TO"
+//    }
+//
+//    vm.addEntityFormGroup = vm.fb.group({
+//      entityName: ['', [vm.validators.required]],
+//      entityType: ['DEVICE'],
+//      entityLabel: [null],
+//      type: ['', [vm.validators.required]],
+//      attributes: vm.fb.group({
+//          latitude: [null],
+//          longitude: [null],
+//          address: [null],
+//          owner: [null],
+//          number: [null, [vm.validators.pattern(/^-?[0-9]+$/)]],
+//          booleanValue: [null]
+//      }),
+//      relations: vm.fb.array([])
+//    });
+//
+//    vm.cancel = function() {
+//        vm.dialogRef.close(null);
+//    };
+//
+//    vm.relations = function() {
+//        return vm.addEntityFormGroup.get('relations');
+//    };
+//
+//    vm.addRelation = function() {
+//        vm.relations().push(vm.fb.group({
+//          relatedEntity: [null, [vm.validators.required]],
+//          relationType: [null, [vm.validators.required]],
+//          direction: [null, [vm.validators.required]]
+//        }));
+//    };
+//
+//    vm.removeRelation = function(index) {
+//        vm.relations().removeAt(index);
+//        vm.relations().markAsDirty();
+//    };
+//
+//    vm.save = function() {
+//        vm.addEntityFormGroup.markAsPristine();
+//        saveEntityObservable().subscribe(
+//            function (entity) {
+//                widgetContext.rxjs.forkJoin([
+//                    saveAttributes(entity.id),
+//                    saveRelations(entity.id)
+//                ]).subscribe(
+//                    function () {
+//                        widgetContext.updateAliases();
+//                        vm.dialogRef.close(null);
+//                    }
+//                );
+//            }
+//        );
+//    };
+//
+//    function saveEntityObservable() {
+//        const formValues = vm.addEntityFormGroup.value;
+//        let entity = {
+//            name: formValues.entityName,
+//            type: formValues.type,
+//            label: formValues.entityLabel
+//        };
+//        if (formValues.entityType == 'ASSET') {
+//            return assetService.saveAsset(entity);
+//        } else if (formValues.entityType == 'DEVICE') {
+//            return deviceService.saveDevice(entity);
+//        }
+//    }
+//
+//    function saveAttributes(entityId) {
+//        let attributes = vm.addEntityFormGroup.get('attributes').value;
+//        let attributesArray = [];
+//        for (let key in attributes) {
+//            if(attributes[key] !== null) {
+//                attributesArray.push({key: key, value: attributes[key]});
+//            }
+//        }
+//        if (attributesArray.length > 0) {
+//            return attributeService.saveEntityAttributes(entityId, "SERVER_SCOPE", attributesArray);
+//        }
+//        return widgetContext.rxjs.of([]);
+//    }
+//
+//    function saveRelations(entityId) {
+//        let relations = vm.addEntityFormGroup.get('relations').value;
+//        let tasks = [];
+//        for(let i=0; i < relations.length; i++) {
+//            let relation = {
+//                type: relations[i].relationType,
+//                typeGroup: 'COMMON'
+//            };
+//            if (relations[i].direction == 'FROM') {
+//                relation.to = relations[i].relatedEntity;
+//                relation.from = entityId;
+//            } else {
+//                relation.to = entityId;
+//                relation.from = relations[i].relatedEntity;
+//            }
+//            tasks.push(entityRelationService.saveRelation(relation));
+//        }
+//        if (tasks.length > 0) {
+//            return widgetContext.rxjs.forkJoin(tasks);
+//        }
+//        return widgetContext.rxjs.of([]);
+//    }
+//}
