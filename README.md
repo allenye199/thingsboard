@@ -1,48 +1,53 @@
-# ThingsBoard 猪场管理系统改动记录
+# ThingsBoard 功能变更记录
 
-本文档记录了对猪场管理系统的所有代码改动。
+本文档记录了基于ThingsBoard 4.0.1社区版的定制化功能变更情况。
 
-## 改动历史
+## 最近更新
 
-### 2023-XX-XX: 初始化项目
-- 创建了基础的猪场管理系统结构
+### 2023-11-30
+- **多租户部署方案完善**：添加了基于标签系统的仪表板引用机制
+- **UI品牌元素整理**：记录了系统共享UI元素定制方法
+- **文档更新**：完善了多租户部署指南文档
 
-### 2023-XX-XX: 添加编辑功能
-- 创建了 `edit_widget_examples_js` 和 `edit_widget_examples_html` 文件
-- 实现了猪场信息编辑功能，包括基本信息和服务器属性
-- 解决了表单验证和HTTP 400错误问题
-- 增加了电子邮件验证功能
+### 2023-11-15
+- **菜单结构优化**：重新组织了系统/租户/客户三级菜单结构
+- **角色分级配置**：完成SysAdmin、TenantAdmin、CustomerUser三级权限配置
+- **标签系统实现**：完成仪表板标签系统配置
 
-### 2023-XX-XX: 添加新增功能
-- 创建了 `add_widget_examples_js` 和 `add_widget_examples_html` 文件
-- 实现了添加猪场功能
-- 包含表单验证和错误处理
+## 主要功能变更
 
-### 2023-XX-XX: 添加删除功能
-- 创建了 `delete_custom_action.js` 文件
-- 实现了猪场删除功能，包括删除确认对话框
-- 添加了成功/失败通知
+### 多租户支持增强
+- 实现基于标签的仪表板引用，解决ID变化问题
+- 支持租户模板配置导出/导入
+- 统一系统级菜单结构，支持租户级内容差异化
 
-## 文件结构
+### UI定制
+- 系统全局UI元素梳理与定制
+- 汉化完善
+- Logo与版权信息更新机制
 
-- `/root/thingsboard/docs/widget/edit_widget_examples_js` - 编辑功能的JavaScript代码
-- `/root/thingsboard/docs/widget/edit_widget_examples_html` - 编辑功能的HTML模板
-- `/root/thingsboard/docs/widget/add_widget_examples_js` - 添加功能的JavaScript代码
-- `/root/thingsboard/docs/widget/add_widget_examples_html` - 添加功能的HTML模板
-- `/root/thingsboard/docs/widget/delete_custom_action.js` - 删除功能的自定义动作代码
+### 菜单重组
+- SysAdmin菜单：系统级管理功能
+- TenantAdmin菜单：猪场管理功能
+- CustomerUser菜单：猪场运营功能
 
-## 使用说明
+## 主要技术方案
 
-### 编辑功能
-编辑功能允许用户修改现有猪场的信息，包括名称、负责人、地理位置等。
+### 标签系统实现
+- 使用ThingsBoard内置标签系统替代硬编码仪表板ID
+- 实现`dashboard-tag-resolver.service.ts`处理标签解析
+- 添加`/dashboard-by-tag/:tag`路由支持标签导航
 
-### 添加功能
-添加功能允许用户创建新的猪场，设置其基本信息和属性。
+### 租户配置共享
+- 系统级菜单结构共享
+- 基于模板租户的配置导入/导出
+- 租户间差异化内容管理
 
-### 删除功能
-删除功能允许用户删除不再需要的猪场，操作前会显示确认对话框。
+## 待办事项
+- [ ] 完善多租户仪表板自动配置脚本
+- [ ] 优化系统品牌定制流程
+- [ ] 增强租户初始化自动化程度
 
-## 注意事项
-
-- 自定义动作代码需要复制到ThingsBoard平台中的部件自定义动作配置中
-- 删除操作不可恢复，请谨慎操作
+## 参考文档
+- [多租户部署指南](/root/thingsboard/docs/多租户部署guide.md) 
+- [菜单及模块功能配置](/root/thingsboard/docs/菜单及模块功能配置)

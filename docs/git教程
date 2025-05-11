@@ -45,10 +45,7 @@ push
 ```bash
 # 更新远程仓库URL，将TOKEN替换为您新生成的Personal Access Token
 git remote set-url origin https://allenye199:your_token@github.com/allenye199/thingsboard.git
-
 ```
-
-请将`YOUR_USERNAME`替换为您的GitHub用户名，将`YOUR_PAT`替换为您新生成的Personal Access Token。
 
 ## 3. 验证远程仓库配置
 
