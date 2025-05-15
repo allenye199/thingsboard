@@ -731,9 +731,9 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       id: MenuId.pigsty,
       name: '单元',
       type: 'link',
-      path: '/dashboards/51393c20-2e67-11f0-98e5-9b82fd9cf0ad',
+      path: '/dashboards/cef13350-30d0-11f0-8990-ebcc99140c05',
       icon: 'grid_view',
-      rootOnly: true
+      rootOnly: false
     }
   ],
   [
