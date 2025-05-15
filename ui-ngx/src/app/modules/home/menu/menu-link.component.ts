@@ -16,6 +16,7 @@
 
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MenuSection } from '@core/services/menu.models';
+import { MenuService } from '@core/services/menu.service';
 
 @Component({
   selector: 'tb-menu-link',
@@ -27,10 +28,12 @@ export class MenuLinkComponent implements OnInit {
 
   @Input() section: MenuSection;
 
-  constructor() {
-  }
+  constructor(private menuService: MenuService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
+  onMenuClick(event: Event) {
+    event.preventDefault();
+    this.menuService.navigateToMenu(this.section);
+  }
 }

@@ -38,4 +38,9 @@ export class SideMenuComponent implements OnInit {
   ngOnInit() {
   }
 
+  onMenuClick(event: Event, section: MenuSection) {
+    event.preventDefault();
+    this.menuService.navigateToMenu(section);
+  }
+
 }

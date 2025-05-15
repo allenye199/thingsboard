@@ -528,7 +528,7 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       id: MenuId.devices,
       name: 'device.devices',
       type: 'link',
-      path: '/entities/devices',
+      path: '/dashboards/f64af740-30b4-11f0-8990-ebcc99140c05',
       icon: 'devices_other'
     }
   ],
@@ -720,9 +720,10 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       id: MenuId.pigfarm,
       name: '猪场',
       type: 'link',
-      path: '/dashboards/c407b430-2e61-11f0-98e5-9b82fd9cf0ad',
+      path: '/dashboards/688e51d0-3169-11f0-849d-1354b6967a37',
       icon: 'home',
       rootOnly: true
+
     }
   ],
   [
@@ -731,9 +732,10 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       id: MenuId.pigsty,
       name: '单元',
       type: 'link',
-      path: '/dashboards/cef13350-30d0-11f0-8990-ebcc99140c05',
+      path: '/dashboards/688e51d0-3169-11f0-849d-1354b6967a37',
       icon: 'grid_view',
       rootOnly: false
+
     }
   ],
   [
@@ -764,7 +766,7 @@ export const menuSectionMap = new Map<MenuId, MenuSection>([
       id: MenuId.pipeline,
       name: '管道',
       type: 'link',
-      path: '/dashboards/c722ce80-2e6f-11f0-98e5-9b82fd9cf0ad',
+      path: '/dashboards/d84ab6d0-3182-11f0-849d-1354b6967a37',
       icon: 'settings_ethernet',
       rootOnly: true
     }

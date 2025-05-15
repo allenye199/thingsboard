@@ -1,0 +1,72 @@
+#### 如何配置一个dashboard和device table widget，实现在 customer 视图下只显示属于自己的device？
+
+创建dashboard，分配客户。
+创建别名“当前猪场_设备列表”，筛选器类型“实体类型”，类型“设备”.
+创建device widget。
+配置widget数据源：
+   类型：“实体”
+   别名：“当前猪场_设备列表”
+
+
+### 如何实现“所有 customer 可见的 dashboard，且在 customer 视图下只显示属于自己的 asset”
+
+#### 步骤一：创建 dashboard 并分配给所有 customer
+
+1. 以 tenant admin 登录 ThingsBoard。
+2. 创建新的 dashboard（如“资产总览”）。
+3. 在 dashboard 列表，点击“更多操作” > “分配给客户”。
+4. 批量勾选所有 customer，点击“分配”。
+   - **注意**：后续新增 customer 需手动分配，或用 API 批量分配。
+
+#### 步骤二：添加 asset table widget
+
+1. 编辑该 dashboard，点击“添加小部件”。
+2. 选择“实体表格”类型（asset table）。
+3. 配置数据源：
+   - 类型：实体
+   - 实体类型：ASSET
+   - 实体别名：选择“当前客户资产”或新建别名
+
+#### 步骤三：配置实体别名为“当前客户资产”
+
+1. 在 dashboard 编辑界面，点击“实体别名”。
+2. 新建别名，名称如“当前客户资产”。
+3. 类型选择“资产搜索查询”。
+4. 查询条件配置如下：
+   - 类型: "当前用户所有者"
+5. 资产类型选择“缺省”。
+
+#### 步骤四：配置筛选器为“标签为单元的资产”
+
+1. 在 dashboard 编辑界面，点击“筛选器”。
+2. 新建别名，名称如“标签为单元的资产”。
+3. 键类型选择“实体”，键名选择"label",值类型选择"字符串"。
+4. 操作选择”等于“，数值选择”单元“
+5. 筛选器预览最后为“label 等于 '单元'”。
+
+#### 步骤四：widget 绑定别名
+
+1. 在 asset table widget 的数据源中，选择刚才创建的“当前客户资产”别名。
+2. 筛选器选择"标签为单元的资产"
+3. 保存 dashboard。
+
+#### 步骤五：验证
+
+1. 用 customer 用户登录。
+2. 打开该 dashboard，表格只显示分配给当前 customer 的 asset。
+
+---
+
+#### 说明
+
+- 这种方式无需参数传递，ThingsBoard 会自动根据当前登录 customer 用户上下文过滤数据。
+- tenant admin 登录时会看到所有 asset，customer 登录时只看到自己的 asset。
+- 若需自动分配 dashboard 给所有 customer，可用 API 脚本定期同步。
+
+---
+
+**参考：**
+- [官方文档：仪表板分配与实体别名](https://thingsboard.io/docs/user-guide/ui/dashboards/)
+- [API 批量分配 dashboard](https://thingsboard.io/docs/reference/rest-api/#assign-dashboard-to-customers)
+
+

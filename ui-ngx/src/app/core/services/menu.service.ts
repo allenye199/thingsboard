@@ -17,12 +17,14 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../core.state';
-import { getCurrentOpenedMenuSections, selectAuth, selectIsAuthenticated } from '../auth/auth.selectors';
+import { getCurrentOpenedMenuSections, selectAuth, selectAuthUser, selectIsAuthenticated } from '../auth/auth.selectors';
 import { filter, map, take } from 'rxjs/operators';
 import { buildUserHome, buildUserMenu, HomeSection, MenuId, MenuSection } from '@core/services/menu.models';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { AuthState } from '@core/auth/auth.models';
 import { NavigationEnd, Router } from '@angular/router';
+import { CustomerService } from '@core/http/customer.service';
+import { Authority } from '@shared/models/authority.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +39,12 @@ export class MenuService {
     map((items) => this.allMenuLinks(items))
   );
 
+  private authUser: any;
+
   constructor(private store: Store<AppState>,
-              private router: Router) {
+              private router: Router,
+              private customerService: CustomerService
+  ) {
     this.store.pipe(select(selectIsAuthenticated)).subscribe(
       (authenticated: boolean) => {
         if (authenticated) {
@@ -51,6 +57,9 @@ export class MenuService {
         this.updateOpenedMenuSections();
       }
     );
+    this.store.pipe(select(selectAuthUser)).subscribe(user => {
+      this.authUser = user;
+    });
   }
 
   private buildMenu() {
@@ -80,6 +89,7 @@ export class MenuService {
     }
   }
 
+  
   private allMenuLinks(sections: Array<MenuSection>): Array<MenuSection> {
     const result: Array<MenuSection> = [];
     for (const section of sections) {
@@ -134,6 +144,42 @@ export class MenuService {
         return i1 - i2;
       }))
     );
+  }
+
+
+  /**
+   * 处理菜单项点击，支持动态参数传递
+   */
+  public navigateToMenu(menuItem: MenuSection) {
+    if (menuItem.id === 'pigsty') { 
+      const user = this.authUser;
+      if (user?.customerId) {
+        this.customerService.getCustomer(user.customerId).subscribe(customer => {
+          const farmEntity = {
+            entityId: {
+              id: user.customerId,
+              entityType: 'CUSTOMER'
+            },
+            entityName: customer.title || '',
+            entityLabel: customer.title || ''
+          };
+          console.log('菜单跳转 farm_id:', farmEntity, '当前用户 customerId:', user?.customerId);
+          const stateObj = [{
+            params: {
+              farm_id: farmEntity,
+              targetEntityParamName: 'farm_id'
+            }
+          }];
+          const stateParam = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj))));
+          this.router.navigate(
+            [menuItem.path],
+            { queryParams: { state: stateParam } }
+          );
+        });
+        return;
+      }
+    }
+    this.router.navigate([menuItem.path]);
   }
 
 }
